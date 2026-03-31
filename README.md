@@ -1,4 +1,4 @@
-# [cite_start]Relatório Técnico-Acadêmico: Projeto Synergy Market [cite: 1]
+# Relatório Técnico-Acadêmico: Projeto Synergy Market [cite: 1]
 
 [cite_start]O projeto Synergy Market consiste no desenvolvimento de um sistema de "mini supermercado autônomo", fundamentado no modelo de negócio conhecido como *honesty market*[cite: 3]. [cite_start]Este conceito é amplamente aplicado em condomínios e espaços corporativos, onde a conveniência e a automação permitem que o consumidor realize suas compras de forma independente, sem a necessidade de intermediários humanos no ponto de venda[cite: 4]. [cite_start]Os objetivos centrais desta solução de Sistema de Gestão Comercial (SGC) incluem a gestão rigorosa de produtos e clientes, o registro automatizado de transações e um controle preciso de estoque e segurança operacional[cite: 5].
 
