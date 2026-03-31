@@ -53,66 +53,66 @@ As funcionalidades do sistema foram agrupadas por categorias de domínio, conten
 
 ---
 
-## 🏛️ 3. Arquitetura do Sistema  45]
-O Synergy Market utiliza uma Arquitetura em Camadas (Layered Architecture), o que promove a separação de preocupações e facilita a manutenibilidade 46].
+## 🏛️ 3. Arquitetura do Sistema  
+O Synergy Market utiliza uma Arquitetura em Camadas (Layered Architecture), o que promove a separação de preocupações e facilita a manutenibilidade.
 
-### 3.1. Estrutura em Camadas  47]
-1. **Camada de Apresentação:** Interface gráfica (Swing ou Web) responsável pela interação com o usuário e pelo envio de requisições HTTP para o backend 48].
-2. **Camada Controller:** Porta de entrada da API; gerencia os endpoints REST, valida os dados de entrada e direciona as chamadas para a camada de serviço 49].
-3. **Camada de Aplicação/Serviço:** Onde reside a inteligência do sistema, contendo as regras de negócio, validações de estoque e orquestração de transações 50].
-4. **Camada de Domínio:** Representa as entidades do mundo real, incluindo classes de modelo e lógica intrínseca às regras de negócio e persistência 51].
-5. **Camada de Persistência (Repository):** Abstrai a complexidade do acesso a dados, utilizando interfaces do Spring Data JPA para realizar operações no MySQL 52].
-
----
-
-## 🎨 4. Padrões de Projeto (Design Patterns)  58]
-
-* **Padrão DTO (Data Transfer Object)  59]:** Aplicado na interface de comunicação entre as camadas Controller e Service 61]. É utilizado para desacoplar as entidades de banco de dados da interface pública da API, evitando a exposição de campos sensíveis 62]. Melhora a segurança ao ocultar campos como a senha do usuário e otimiza o tráfego de rede ao enviar apenas os dados estritamente necessários 63].
-* **Padrão Repository  64]:** Aplicado na camada de persistência, estendendo as interfaces do Spring Data JPA 65]. Adotado para abstrair a lógica de acesso a dados e centralizar as consultas SQL 66]. Promove alta coesão e permite a manutenção ou troca do banco de dados com impacto mínimo nas regras de negócio da aplicação 67].
+### 3.1. Estrutura em Camadas 
+1. **Camada de Apresentação:** Interface gráfica (Swing ou Web) responsável pela interação com o usuário e pelo envio de requisições HTTP para o backend.
+2. **Camada Controller:** Porta de entrada da API; gerencia os endpoints REST, valida os dados de entrada e direciona as chamadas para a camada de serviço.
+3. **Camada de Aplicação/Serviço:** Onde reside a inteligência do sistema, contendo as regras de negócio, validações de estoque e orquestração de transações.
+4. **Camada de Domínio:** Representa as entidades do mundo real, incluindo classes de modelo e lógica intrínseca às regras de negócio e persistência.
+5. **Camada de Persistência (Repository):** Abstrai a complexidade do acesso a dados, utilizando interfaces do Spring Data JPA para realizar operações no MySQL.
 
 ---
 
-## 📊 5. Modelagem Estrutural e de Dados  68]
+## 🎨 4. Padrões de Projeto (Design Patterns)  
 
-### 5.1. Modelagem de Domínio e Classes  69]
+* **Padrão DTO (Data Transfer Object):** Aplicado na interface de comunicação entre as camadas Controller e Service. É utilizado para desacoplar as entidades de banco de dados da interface pública da API, evitando a exposição de campos sensíveis. Melhora a segurança ao ocultar campos como a senha do usuário e otimiza o tráfego de rede ao enviar apenas os dados estritamente necessários.
+* **Padrão Repository:** Aplicado na camada de persistência, estendendo as interfaces do Spring Data JPA. Adotado para abstrair a lógica de acesso a dados e centralizar as consultas SQL. Promove alta coesão e permite a manutenção ou troca do banco de dados com impacto mínimo nas regras de negócio da aplicação.
+
+---
+
+## 📊 5. Modelagem Estrutural e de Dados  
+
+### 5.1. Modelagem de Domínio e Classes  
 | Classe | Atributos Principais | Relacionamentos |
 | :--- | :--- | :--- |
-| **Cliente**  71] | id, nome, cpf, email, telefone, endereco  71] | Possui 0 ou muitas Vendas (1:N)  71] |
-| **Produto**  71] | id, nome, descricao, preco, quantidadeEmEstoque  71] | Referenciado em ItemVenda (1:N)  71] |
-| **Venda**  71] | id, data, valor Total, cliente_id, usuario_id  71] | Contém 1 ou muitos Itens Venda (1:N)  71] |
-| **ItemVenda**  71] | id, venda_id, produto_id, quantidade, precoUnitario  71] | Pertence a uma Venda e um Produto  71] |
-| **Usuario**  71] | id, username, senha, perfil (ADMIN/FUNCIONARIO)  71] | Registra 0 ou muitas Vendas (1:N)  71] |
+| **Cliente**  | id, nome, cpf, email, telefone, endereco  | Possui 0 ou muitas Vendas (1:N)  |
+| **Produto**  | id, nome, descricao, preco, quantidadeEmEstoque  | Referenciado em ItemVenda (1:N)  |
+| **Venda**  | id, data, valor Total, cliente_id, usuario_id  | Contém 1 ou muitos Itens Venda (1:N)  |
+| **ItemVenda**  | id, venda_id, produto_id, quantidade, precoUnitario  | Pertence a uma Venda e um Produto  |
+| **Usuario**  | id, username, senha, perfil (ADMIN/FUNCIONARIO)  | Registra 0 ou muitas Vendas (1:N)  |
 
-### 5.2. Modelo Lógico do Banco de Dados  72]
-* **usuarios:** Tabela de credenciais (PK: id, UK: username) 73].
-* **clientes:** Tabela de moradores (PK: id, UK: cpf) 74].
-* **produtos:** Cadastro de mercadorias (PK: id) 75].
-* **vendas:** Transações de saída (PK: id, FK: cliente_id, FK: usuario_id) 76].
-* **itens_venda:** Detalhamento da venda (PK: id, FK: venda_id, FK: produto_id) 77].
+### 5.2. Modelo Lógico do Banco de Dados 
+* **usuarios:** Tabela de credenciais (PK: id, UK: username).
+* **clientes:** Tabela de moradores (PK: id, UK: cpf).
+* **produtos:** Cadastro de mercadorias (PK: id).
+* **vendas:** Transações de saída (PK: id, FK: cliente_id, FK: usuario_id).
+* **itens_venda:** Detalhamento da venda (PK: id, FK: venda_id, FK: produto_id).
 
 ---
 
-## 📅 6. Planejamento de Entregas (Roadmap Acadêmico)  122]
+## 📅 6. Planejamento de Entregas (Roadmap Acadêmico)  
 
 | Entrega | Foco / Objetivo | Principais Entregáveis | Data Limite |
 | :--- | :--- | :--- | :--- |
-| **Entrega 1**  124] | Modelagem e Arquitetura  124] | PDF Descritivo, Diagramas (Domínio e Classes), Script SQL e GitHub  124] | 02/04  124] |
-| **Entrega 2**  124] | Backend e API  124] | API funcional, CRUDs, Integração MySQL, Autenticação JWT e Tratamento de Exceções  124] | 07/05  124] |
-| **Entrega 3**  124] | Sistema Completo  124] | Integração UI (Swing/Web), Controle de Estoque, Relatórios e Documentação Final  124] | 25/06  124] |
+| **Entrega 1** | Modelagem e Arquitetura  | PDF Descritivo, Diagramas (Domínio e Classes), Script SQL e GitHub  | 02/04  |
+| **Entrega 2** | Backend e API  | API funcional, CRUDs, Integração MySQL, Autenticação JWT e Tratamento de Exceções  | 07/05  |
+| **Entrega 3** | Sistema Completo  | Integração UI (Swing/Web), Controle de Estoque, Relatórios e Documentação Final  | 25/06  |
 
 ---
 
-## 🛠️ 7. Instruções de Implementação e Segurança  125]
-O projeto deve seguir rigorosamente a estrutura de diretórios padrão Maven para garantir a organização do código-fonte no pacote `br.com.sgc` 126]:
-* **config/**: Deve conter `SecurityConfig.java`, `JwtAuthenticationFilter.java` e `JwtService.java` 127, 128].
-* **controller/**: Classes como `AuthController.java` e `VendaController.java` 129].
-* **service/**: Lógica central em `VendaService.java` e `AuthService.java` 130].
-* **domain/model/**: Entidades JPA como `Cliente.java` e `Venda.java` 130].
-* **dto/**: Objetos de transferência como `AuthRequestDTO.java` e `VendaDTO.java` 131].
-* **exception/**: `GlobalExceptionHandler.java` para tratamento centralizado de erros 131].
-* **util/**: `MapperUtil.java` para conversão entre Entidades e DTOS 132].
+## 🛠️ 7. Instruções de Implementação e Segurança  
+O projeto deve seguir rigorosamente a estrutura de diretórios padrão Maven para garantir a organização do código-fonte no pacote `br.com.sgc`:
+* **config/**: Deve conter `SecurityConfig.java`, `JwtAuthenticationFilter.java` e `JwtService.java`.
+* **controller/**: Classes como `AuthController.java` e `VendaController.java`.
+* **service/**: Lógica central em `VendaService.java` e `AuthService.java`.
+* **domain/model/**: Entidades JPA como `Cliente.java` e `Venda.java`.
+* **dto/**: Objetos de transferência como `AuthRequestDTO.java` e `VendaDTO.java`.
+* **exception/**: `GlobalExceptionHandler.java` para tratamento centralizado de erros.
+* **util/**: `MapperUtil.java` para conversão entre Entidades e DTOS.
 
 ### Segurança
-* A autenticação é provida via JWT 133].
-* Todas as senhas de usuários devem ser processadas pelo `PasswordEncoder` com algoritmo BCrypt antes da persistência 133].
-* O acesso aos recursos é filtrado pelo perfil (ADMIN para funções gerenciais e FUNCIONARIO para operações de PDV) 134].
+* A autenticação é provida via JWT.
+* Todas as senhas de usuários devem ser processadas pelo `PasswordEncoder` com algoritmo BCrypt antes da persistência.
+* O acesso aos recursos é filtrado pelo perfil (ADMIN para funções gerenciais e FUNCIONARIO para operações de PDV).
