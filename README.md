@@ -90,29 +90,3 @@ O Synergy Market utiliza uma Arquitetura em Camadas (Layered Architecture), o qu
 * **vendas:** Transações de saída (PK: id, FK: cliente_id, FK: usuario_id).
 * **itens_venda:** Detalhamento da venda (PK: id, FK: venda_id, FK: produto_id).
 
----
-
-## 📅 6. Planejamento de Entregas (Roadmap Acadêmico)  
-
-| Entrega | Foco / Objetivo | Principais Entregáveis | Data Limite |
-| :--- | :--- | :--- | :--- |
-| **Entrega 1** | Modelagem e Arquitetura  | PDF Descritivo, Diagramas (Domínio e Classes), Script SQL e GitHub  | 02/04  |
-| **Entrega 2** | Backend e API  | API funcional, CRUDs, Integração MySQL, Autenticação JWT e Tratamento de Exceções  | 07/05  |
-| **Entrega 3** | Sistema Completo  | Integração UI (Swing/Web), Controle de Estoque, Relatórios e Documentação Final  | 25/06  |
-
----
-
-## 🛠️ 7. Instruções de Implementação e Segurança  
-O projeto deve seguir rigorosamente a estrutura de diretórios padrão Maven para garantir a organização do código-fonte no pacote `br.com.sgc`:
-* **config/**: Deve conter `SecurityConfig.java`, `JwtAuthenticationFilter.java` e `JwtService.java`.
-* **controller/**: Classes como `AuthController.java` e `VendaController.java`.
-* **service/**: Lógica central em `VendaService.java` e `AuthService.java`.
-* **domain/model/**: Entidades JPA como `Cliente.java` e `Venda.java`.
-* **dto/**: Objetos de transferência como `AuthRequestDTO.java` e `VendaDTO.java`.
-* **exception/**: `GlobalExceptionHandler.java` para tratamento centralizado de erros.
-* **util/**: `MapperUtil.java` para conversão entre Entidades e DTOS.
-
-### Segurança
-* A autenticação é provida via JWT.
-* Todas as senhas de usuários devem ser processadas pelo `PasswordEncoder` com algoritmo BCrypt antes da persistência.
-* O acesso aos recursos é filtrado pelo perfil (ADMIN para funções gerenciais e FUNCIONARIO para operações de PDV).
