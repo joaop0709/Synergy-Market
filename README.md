@@ -1,92 +1,136 @@
-# Relatório Técnico-Acadêmico: Projeto Synergy Market 
+# 🛒 Synergy Market - Backend API
 
-O projeto Synergy Market consiste no desenvolvimento de um sistema de "mini supermercado autônomo", fundamentado no modelo de negócio conhecido como *honesty market*. Este conceito é amplamente aplicado em condomínios e espaços corporativos, onde a conveniência e a automação permitem que o consumidor realize suas compras de forma independente, sem a necessidade de intermediários humanos no ponto de venda. Os objetivos centrais desta solução de Sistema de Gestão Comercial (SGC) incluem a gestão rigorosa de produtos e clientes, o registro automatizado de transações e um controle preciso de estoque e segurança operacional.
+Sistema de Gestão Comercial para mini supermercado autônomo (honesty market).
 
----
+## 🚀 Tecnologias
 
-## 🚀 1. Descrição do Sistema e Escopo  
-O Synergy Market é uma aplicação de gestão comercial projetada para operar em cenários reais de automação residencial e comercial. Sua proposta de valor reside na integração entre hardware (terminais de autoatendimento) e software para garantir uma operação fluida e segura.
+- Java 21
+- Spring Boot 3.2
+- Spring Security + JWT
+- Spring Data JPA / Hibernate
+- MySQL 8
+- Maven
+- Lombok
 
-### Fluxo Operacional
-* O fluxo operacional básico inicia-se com a identificação do morador ou usuário no sistema.
-* Durante o processo de compra, o morador seleciona os itens desejados, e o sistema valida em tempo real a disponibilidade física no inventário.
-* Ao concluir a transação, o SGC assegura a integridade dos dados, atualizando instantaneamente o saldo do estoque e registrando a venda sob o perfil do usuário autenticado.
+## 📁 Estrutura do Projeto
 
----
+```
+src/main/java/com/synergymarket/
+├── config/          # Configurações de segurança (SecurityConfig)
+├── controller/      # Endpoints REST
+├── dto/             # Data Transfer Objects
+├── entity/          # Entidades JPA
+├── enums/           # Enumerações (PerfilUsuario)
+├── exception/       # Exceções customizadas + Handler global
+├── repository/      # Interfaces JPA Repository
+├── security/        # JWT Service + Filtro de autenticação
+└── service/         # Regras de negócio
+```
 
-## 📋 2. Requisitos do Sistema 
+## ⚙️ Como rodar
 
-### 2.1. Requisitos Funcionais  
-As funcionalidades do sistema foram agrupadas por categorias de domínio, contendo atributos específicos e regras de negócio obrigatórias:
+### 1. Pré-requisitos
+- Java 21+
+- MySQL 8 rodando localmente
+- Maven
 
-**Gestão de Clientes**
-* Atributos: ID (PK), Nome, CPF (Unique), E-mail, Telefone e Endereço.
-* O CPF deve ser único no banco de dados.
-* O e-mail deve passar por validação de formato.
-* O sistema deve impedir a exclusão de clientes que possuam histórico de compras vinculado.
+### 2. Configure o banco
+Edite `src/main/resources/application.properties`:
+```properties
+spring.datasource.username=root
+spring.datasource.password=SUA_SENHA
+```
 
-**Gestão de Produtos**
-* Atributos: ID (PK), Nome, Descrição, Preço e Quantidade em Estoque.
-* O preço não pode ser negativo.
-* O sistema deve controlar o estoque mínimo.
-* A venda deve ser bloqueada na camada de serviço se a quantidade solicitada for superior ao estoque disponível.
-
-**Registro de Venda**
-* Atributos: ID (PK), Data, Cliente (FK), Lista de Itens (ItemVenda), Valor Total e Usuário Responsável (FK).
-* O valor total deve ser calculado automaticamente pelo sistema.
-* A confirmação da venda dispara a atualização automática do estoque.
-* É proibido o registro de transações sem ao menos um item selecionado.
-
-**Autenticação de Usuários**
-* Atributos: ID (PK), Username (Unique), Senha (criptografada) e Perfil (ADMIN, FUNCIONARIO).
-* O acesso deve ocorrer obrigatoriamente via endpoint de login, utilizando proteção de rotas por token e controle de acesso baseado em perfis (RBAC).
-
-**Relatórios**
-* Geração de demonstrativos de vendas por período e por cliente.
-* Criação de uma representação gráfica das vendas anuais para análise de tendência.
-
-### 2.2. Requisitos Não Funcionais  
-* **Comunicação:** Interface baseada em API REST, utilizando JSON como padrão de intercâmbio de dados.
-* **Segurança:** Implementação de autenticação via Token (JWT) com expiração definida; criptografia de senhas utilizando o algoritmo BCrypt.
-* **Stack Tecnológica:** Java 21+, Spring Boot 3+, Spring Data JPA, Maven para automação de build e MySQL como sistema gerenciador de banco de dados relacional.
-* **Interface de Usuário:** Front-end desenvolvido em Swing ou ambiente Web, agindo como cliente da API REST.
+### 3. Execute
+```bash
+mvn spring-boot:run
+```
+A API estará disponível em `http://localhost:8080`
 
 ---
 
-## 🏛️ 3. Arquitetura do Sistema  
-O Synergy Market utiliza uma Arquitetura em Camadas (Layered Architecture), o que promove a separação de preocupações e facilita a manutenibilidade.
+## 🔐 Autenticação
 
-### 3.1. Estrutura em Camadas 
-1. **Camada de Apresentação:** Interface gráfica (Swing ou Web) responsável pela interação com o usuário e pelo envio de requisições HTTP para o backend.
-2. **Camada Controller:** Porta de entrada da API; gerencia os endpoints REST, valida os dados de entrada e direciona as chamadas para a camada de serviço.
-3. **Camada de Aplicação/Serviço:** Onde reside a inteligência do sistema, contendo as regras de negócio, validações de estoque e orquestração de transações.
-4. **Camada de Domínio:** Representa as entidades do mundo real, incluindo classes de modelo e lógica intrínseca às regras de negócio e persistência.
-5. **Camada de Persistência (Repository):** Abstrai a complexidade do acesso a dados, utilizando interfaces do Spring Data JPA para realizar operações no MySQL.
+### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "senha": "123456"
+}
+```
+
+Resposta:
+```json
+{
+  "token": "eyJhbGci...",
+  "username": "admin",
+  "perfil": "ROLE_ADMIN"
+}
+```
+
+Use o token nas demais requisições:
+```
+Authorization: Bearer <token>
+```
 
 ---
 
-## 🎨 4. Padrões de Projeto (Design Patterns)  
+## 📌 Endpoints
 
-* **Padrão DTO (Data Transfer Object):** Aplicado na interface de comunicação entre as camadas Controller e Service. É utilizado para desacoplar as entidades de banco de dados da interface pública da API, evitando a exposição de campos sensíveis. Melhora a segurança ao ocultar campos como a senha do usuário e otimiza o tráfego de rede ao enviar apenas os dados estritamente necessários.
-* **Padrão Repository:** Aplicado na camada de persistência, estendendo as interfaces do Spring Data JPA. Adotado para abstrair a lógica de acesso a dados e centralizar as consultas SQL. Promove alta coesão e permite a manutenção ou troca do banco de dados com impacto mínimo nas regras de negócio da aplicação.
+### Clientes
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/clientes` | Listar todos |
+| GET | `/api/clientes/{id}` | Buscar por ID |
+| POST | `/api/clientes` | Criar cliente |
+| PUT | `/api/clientes/{id}` | Atualizar cliente |
+| DELETE | `/api/clientes/{id}` | Deletar cliente |
+
+### Produtos
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/produtos` | Listar todos |
+| GET | `/api/produtos/{id}` | Buscar por ID |
+| POST | `/api/produtos` | Criar produto |
+| PUT | `/api/produtos/{id}` | Atualizar produto |
+| DELETE | `/api/produtos/{id}` | Deletar produto |
+
+### Vendas
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/vendas` | Listar todas |
+| GET | `/api/vendas/{id}` | Buscar por ID |
+| POST | `/api/vendas` | Registrar venda |
 
 ---
 
-## 📊 5. Modelagem Estrutural e de Dados  
+## 🏗️ Arquitetura
 
-### 5.1. Modelagem de Domínio e Classes  
-| Classe | Atributos Principais | Relacionamentos |
-| :--- | :--- | :--- |
-| **Cliente**  | id, nome, cpf, email, telefone, endereco  | Possui 0 ou muitas Vendas (1:N)  |
-| **Produto**  | id, nome, descricao, preco, quantidadeEmEstoque  | Referenciado em ItemVenda (1:N)  |
-| **Venda**  | id, data, valor Total, cliente_id, usuario_id  | Contém 1 ou muitos Itens Venda (1:N)  |
-| **ItemVenda**  | id, venda_id, produto_id, quantidade, precoUnitario  | Pertence a uma Venda e um Produto  |
-| **Usuario**  | id, username, senha, perfil (ADMIN/FUNCIONARIO)  | Registra 0 ou muitas Vendas (1:N)  |
+Arquitetura em Camadas (Layered Architecture):
 
-### 5.2. Modelo Lógico do Banco de Dados 
-* **usuarios:** Tabela de credenciais (PK: id, UK: username).
-* **clientes:** Tabela de moradores (PK: id, UK: cpf).
-* **produtos:** Cadastro de mercadorias (PK: id).
-* **vendas:** Transações de saída (PK: id, FK: cliente_id, FK: usuario_id).
-* **itens_venda:** Detalhamento da venda (PK: id, FK: venda_id, FK: produto_id).
+```
+Controller → Service → Repository → MySQL
+```
 
+**Design Patterns aplicados:**
+- **DTO (Data Transfer Object):** Desacopla entidades da API pública
+- **Repository Pattern:** Abstrai o acesso ao banco de dados
+
+---
+
+## 🧪 Testes
+
+```bash
+mvn test
+```
+
+Testes unitários dos Services com JUnit 5 + Mockito.
+
+---
+
+## 👥 Autores
+
+João Paulo Costa, Henrique Guimarães, Miguel Marques
