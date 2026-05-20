@@ -1,13 +1,10 @@
 package com.synergymarket.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class LoginRequestDTO {
-    @NotBlank(message = "Username é obrigatório")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class LoginResponseDTO {
+    private String token;
     private String username;
-
-    @NotBlank(message = "Senha é obrigatória")
-    private String senha;
+    private String perfil;
 }

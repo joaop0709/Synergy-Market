@@ -1,21 +1,34 @@
-package com.synergymarket.dto;
+package com.synergymarket.entity;
 
-import jakarta.validation.constraints.*;
+import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "itens_venda")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class ItemVendaDTO {
+public class ItemVenda {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Produto é obrigatório")
-    private Long produtoId;
-    private String produtoNome;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "venda_id", nullable = false)
+    private Venda venda;
 
-    @NotNull(message = "Quantidade é obrigatória")
-    @Min(value = 1, message = "Quantidade mínima é 1")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "produto_id", nullable = false)
+    private Produto produto;
+
+    @Column(nullable = false)
     private Integer quantidade;
 
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precoUnitario;
-    private BigDecimal subtotal;
+
+    public BigDecimal getSubtotal() {
+        return precoUnitario.multiply(BigDecimal.valueOf(quantidade));
+    }
 }

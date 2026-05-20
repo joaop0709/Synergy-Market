@@ -5,19 +5,17 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class ProdutoDTO {
+public class ItemVendaDTO {
     private Long id;
 
-    @NotBlank(message = "Nome é obrigatório")
-    private String nome;
+    @NotNull(message = "Produto é obrigatório")
+    private Long produtoId;
+    private String produtoNome;
 
-    private String descricao;
+    @NotNull(message = "Quantidade é obrigatória")
+    @Min(value = 1, message = "Quantidade mínima é 1")
+    private Integer quantidade;
 
-    @NotNull(message = "Preço é obrigatório")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Preço não pode ser negativo")
-    private BigDecimal preco;
-
-    @NotNull(message = "Quantidade em estoque é obrigatória")
-    @Min(value = 0, message = "Estoque não pode ser negativo")
-    private Integer quantidadeEstoque;
+    private BigDecimal precoUnitario;
+    private BigDecimal subtotal;
 }

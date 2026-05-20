@@ -1,7 +1,7 @@
 package com.synergymarket.controller;
 
-import com.synergymarket.dto.ClienteDTO;
-import com.synergymarket.service.ClienteService;
+import com.synergymarket.dto.ProdutoDTO;
+import com.synergymarket.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -10,35 +10,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api/produtos")
 @RequiredArgsConstructor
-public class ClienteController {
+public class ProdutoController {
 
-    private final ClienteService clienteService;
+    private final ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> listarTodos() {
-        return ResponseEntity.ok(clienteService.listarTodos());
+    public ResponseEntity<List<ProdutoDTO>> listarTodos() {
+        return ResponseEntity.ok(produtoService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(clienteService.buscarPorId(id));
+    public ResponseEntity<ProdutoDTO> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> criar(@Valid @RequestBody ClienteDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.criar(dto));
+    public ResponseEntity<ProdutoDTO> criar(@Valid @RequestBody ProdutoDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteDTO dto) {
-        return ResponseEntity.ok(clienteService.atualizar(id, dto));
+    public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dto) {
+        return ResponseEntity.ok(produtoService.atualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        clienteService.deletar(id);
+        produtoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }

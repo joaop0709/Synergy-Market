@@ -1,22 +1,13 @@
-package com.synergymarket.controller;
+package com.synergymarket.dto;
 
-import com.synergymarket.dto.LoginRequestDTO;
-import com.synergymarket.dto.LoginResponseDTO;
-import com.synergymarket.service.AuthService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
-@RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
-public class AuthController {
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+public class LoginRequestDTO {
+    @NotBlank(message = "Username é obrigatório")
+    private String username;
 
-    private final AuthService authService;
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
-        return ResponseEntity.ok(authService.login(dto));
-    }
+    @NotBlank(message = "Senha é obrigatória")
+    private String senha;
 }

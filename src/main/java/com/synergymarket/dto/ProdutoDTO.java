@@ -1,44 +1,23 @@
-package com.synergymarket.controller;
+package com.synergymarket.dto;
 
-import com.synergymarket.dto.ProdutoDTO;
-import com.synergymarket.service.ProdutoService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import java.math.BigDecimal;
 
-import java.util.List;
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class ProdutoDTO {
+    private Long id;
 
-@RestController
-@RequestMapping("/api/produtos")
-@RequiredArgsConstructor
-public class ProdutoController {
+    @NotBlank(message = "Nome é obrigatório")
+    private String nome;
 
-    private final ProdutoService produtoService;
+    private String descricao;
 
-    @GetMapping
-    public ResponseEntity<List<ProdutoDTO>> listarTodos() {
-        return ResponseEntity.ok(produtoService.listarTodos());
-    }
+    @NotNull(message = "Preço é obrigatório")
+    @DecimalMin(value = "0.0", inclusive = true, message = "Preço não pode ser negativo")
+    private BigDecimal preco;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(produtoService.buscarPorId(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<ProdutoDTO> criar(@Valid @RequestBody ProdutoDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(dto));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dto) {
-        return ResponseEntity.ok(produtoService.atualizar(id, dto));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        produtoService.deletar(id);
-        return ResponseEntity.noContent().build();
-    }
+    @NotNull(message = "Quantidade em estoque é obrigatória")
+    @Min(value = 0, message = "Estoque não pode ser negativo")
+    private Integer quantidadeEstoque;
 }

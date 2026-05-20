@@ -2,22 +2,21 @@ package com.synergymarket.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class ClienteDTO {
+public class VendaDTO {
     private Long id;
+    private LocalDateTime data;
+    private BigDecimal valorTotal;
 
-    @NotBlank(message = "Nome é obrigatório")
-    private String nome;
+    @NotNull(message = "Cliente é obrigatório")
+    private Long clienteId;
+    private String clienteNome;
 
-    @NotBlank(message = "CPF é obrigatório")
-    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF inválido. Use o formato: 000.000.000-00")
-    private String cpf;
-
-    @NotBlank(message = "E-mail é obrigatório")
-    @Email(message = "E-mail inválido")
-    private String email;
-
-    private String telefone;
-    private String endereco;
+    @NotNull(message = "Pelo menos um item é obrigatório")
+    @Size(min = 1, message = "A venda deve ter ao menos um item")
+    private List<ItemVendaDTO> itens;
 }

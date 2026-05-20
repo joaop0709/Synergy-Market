@@ -1,32 +1,49 @@
-package com.synergymarket.entity;
+package com.synergymarket.exception;
 
-import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.http.*;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
 
-@Entity
-@Table(name = "produtos")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class Produto {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
 
-    @Column(nullable = false, length = 150)
-    private String nome;
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 
-    @Column(columnDefinition = "TEXT")
-    private String descricao;
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .toList();
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("erros", errors);
+        return ResponseEntity.badRequest().body(body);
+    }
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal preco;
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + ex.getMessage());
+    }
 
-    @Column(nullable = false)
-    private Integer quantidadeEstoque;
-
-    public void atualizarEstoque(int quantidade) {
-        this.quantidadeEstoque -= quantidade;
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("mensagem", message);
+        return ResponseEntity.status(status).body(body);
     }
 }

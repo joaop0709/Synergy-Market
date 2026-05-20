@@ -1,22 +1,32 @@
-package com.synergymarket.dto;
+package com.synergymarket.entity;
 
-import jakarta.validation.constraints.*;
+import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
+@Entity
+@Table(name = "produtos")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class VendaDTO {
+public class Produto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime data;
-    private BigDecimal valorTotal;
 
-    @NotNull(message = "Cliente é obrigatório")
-    private Long clienteId;
-    private String clienteNome;
+    @Column(nullable = false, length = 150)
+    private String nome;
 
-    @NotNull(message = "Pelo menos um item é obrigatório")
-    @Size(min = 1, message = "A venda deve ter ao menos um item")
-    private List<ItemVendaDTO> itens;
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;
+
+    @Column(nullable = false)
+    private Integer quantidadeEstoque;
+
+    public void atualizarEstoque(int quantidade) {
+        this.quantidadeEstoque -= quantidade;
+    }
 }

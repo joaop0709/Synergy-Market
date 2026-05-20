@@ -1,33 +1,22 @@
 package com.synergymarket.controller;
 
-import com.synergymarket.dto.VendaDTO;
-import com.synergymarket.service.VendaService;
+import com.synergymarket.dto.LoginRequestDTO;
+import com.synergymarket.dto.LoginResponseDTO;
+import com.synergymarket.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/vendas")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class VendaController {
+public class AuthController {
 
-    private final VendaService vendaService;
+    private final AuthService authService;
 
-    @GetMapping
-    public ResponseEntity<List<VendaDTO>> listarTodas() {
-        return ResponseEntity.ok(vendaService.listarTodas());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<VendaDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(vendaService.buscarPorId(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<VendaDTO> registrar(@Valid @RequestBody VendaDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(vendaService.registrarVenda(dto));
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
+        return ResponseEntity.ok(authService.login(dto));
     }
 }
