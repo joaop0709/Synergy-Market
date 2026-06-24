@@ -1,4 +1,4 @@
-# 🛒 Synergy Market — Sistema de Gestão Comercial
+# 🛒 Synergy Market — Sistema de Gestão Comercial!!
 
 Sistema de gestão para mini supermercado autônomo (honesty market), desenvolvido como projeto acadêmico na disciplina de Desenvolvimento de Software.
 
