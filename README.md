@@ -81,8 +81,24 @@ Ou crie manualmente:
 ```sql
 CREATE DATABASE IF NOT EXISTS sgc_synergy_market;
 ```
+## 2.🖥️ Interface Gráfica (Java Swing)
 
-### 2. Configurar a senha do banco
+O sistema conta com uma interface desktop completa desenvolvida em **Java Swing**, localizada no pacote `com.synergymarket.swing`. Essa interface foi projetada seguindo os critérios de alta coesão e baixo acoplamento, comunicando-se com o backend exclusivamente por meio de requisições HTTP via API REST.
+
+### 🧱 Estrutura dos Módulos (Swing)
+* **`ApiClient.java`**: Responsável por centralizar e realizar a comunicação HTTP/REST com a API protegida do backend.
+* **`LoginFrame.java`**: Tela de autenticação segura para controle de acesso ao sistema.
+* **`MainFrame.java`**: Painel principal que serve como ponto central de navegação entre os módulos.
+* **`ClientePanel.java` & `ProdutoPanel.java`**: Telas de gerenciamento (cadastro, edição e consulta) de clientes e produtos.
+* **`VendaPanel.java`**: Módulo de registro de vendas em tempo real, integrado diretamente com a baixa automática do controle de estoque no backend.
+* **`RelatorioPanel.java`**: Painel visual de fechamento e relatórios de vendas consolidados.
+
+### 🚀 Como Executar a Interface Swing
+1. Certifique-se de que o backend da API (`SynergyMarketApplication`) está rodando e ativo.
+2. Execute a classe principal da interface gráfica:
+   ```bash
+   com.synergymarket.swing.SwingApp
+### 3. Configurar a senha do banco
 
 Edite o arquivo `src/main/resources/application.properties`:
 
@@ -90,7 +106,7 @@ Edite o arquivo `src/main/resources/application.properties`:
 spring.datasource.password=SUA_SENHA_AQUI
 ```
 
-### 3. Rodar o backend
+### 4. Rodar o backend
 
 ```bash
 mvn spring-boot:run
@@ -102,7 +118,7 @@ O sistema cria automaticamente um usuário admin ao iniciar:
 - **Usuário:** `admin`
 - **Senha:** `123456`
 
-### 4. Abrir o frontend
+### 5. Abrir o frontend
 
 Abra o arquivo `frontend/index.html` diretamente no navegador (duplo clique).
 
