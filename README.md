@@ -116,7 +116,7 @@ A API estará disponível em: **http://localhost:8080**
 
 O sistema cria automaticamente um usuário admin ao iniciar:
 - **Usuário:** `admin`
-- **Senha:** `123456`
+- **Senha:** `admin123`
 
 ### 5. Abrir o frontend
 
@@ -142,7 +142,7 @@ Content-Type: application/json
 
 {
   "username": "admin",
-  "senha": "123"
+  "senha": "admin123"
 }
 ```
 
