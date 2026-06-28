@@ -39,7 +39,9 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                // Swagger UI liberado sem autenticação
+                // Arquivos estáticos liberados
+                .requestMatchers("/", "/index.html", "/*.html", "/*.css", "/*.js").permitAll()
+                // Swagger liberado
                 .requestMatchers(
                     "/swagger-ui.html",
                     "/swagger-ui/**",
